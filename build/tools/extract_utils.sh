@@ -635,7 +635,7 @@ EOF
 # Return success if adb is up and not in recovery
 function _adb_connected {
     {
-        if [[ "$(adb get-state)" == recovery ]]
+        if [[ "$(sudo adb get-state)" == recovery ]]
         then
             return 0
         fi
@@ -764,7 +764,7 @@ function get_file() {
 
     if [ "$SRC" = "adb" ]; then
         # try to pull
-        adb pull "$1" "$2" >/dev/null 2>&1 && return 0
+        sudo adb pull "$1" "$2" >/dev/null 2>&1 && return 0
 
         return 1
     else
