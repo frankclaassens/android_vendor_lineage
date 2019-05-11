@@ -635,7 +635,7 @@ EOF
 # Return success if adb is up and not in recovery
 function _adb_connected {
     {
-        if [[ "$(adb get-state)" == device ]]
+        if [[ "$(adb get-state)" == recovery ]]
         then
             return 0
         fi
@@ -888,7 +888,7 @@ function oat2dex() {
 # Starts adb server and waits for the device
 #
 function init_adb_connection() {
-    adb start-server # Prevent unexpected starting server message from adb get-state in the next line
+    #adb start-server # Prevent unexpected starting server message from adb get-state in the next line
     if ! _adb_connected; then
         echo "No device is online. Waiting for one..."
         echo "Please connect USB and/or enable USB debugging"
@@ -898,18 +898,18 @@ function init_adb_connection() {
         echo "Device Found."
     fi
 
-    # Retrieve IP and PORT info if we're using a TCP connection
-    TCPIPPORT=$(adb devices | egrep '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+:[0-9]+[^0-9]+' \
-        | head -1 | awk '{print $1}')
-    adb root &> /dev/null
-    sleep 0.3
-    if [ -n "$TCPIPPORT" ]; then
-        # adb root just killed our connection
-        # so reconnect...
-        adb connect "$TCPIPPORT"
-    fi
-    adb wait-for-device &> /dev/null
-    sleep 0.3
+    # # Retrieve IP and PORT info if we're using a TCP connection
+    # TCPIPPORT=$(adb devices | egrep '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+:[0-9]+[^0-9]+' \
+    #     | head -1 | awk '{print $1}')
+    # adb root &> /dev/null
+    # sleep 0.3
+    # if [ -n "$TCPIPPORT" ]; then
+    #     # adb root just killed our connection
+    #     # so reconnect...
+    #     adb connect "$TCPIPPORT"
+    # fi
+    # adb wait-for-device &> /dev/null
+    # sleep 0.3
 }
 
 #
